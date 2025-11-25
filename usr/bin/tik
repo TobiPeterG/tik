@@ -33,6 +33,8 @@ else
     gui=false
 fi
 
+tik_init_dialog
+
 # Read configuration files, /usr first, then /etc
 . ${tik_dir}/config
 . ${TIK_CUSTOM_DIR}/config

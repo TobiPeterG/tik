@@ -4,6 +4,26 @@
 
 . /usr/lib/tik/lib/cenity
 
+tik_gui_cmd=""
+
+tik_init_dialog() {
+    # called after $gui has been set
+    if ! $gui; then
+        tik_gui_cmd=""
+        return
+    fi
+
+    if command -v qarma >/dev/null 2>&1; then
+        tik_gui_cmd="qarma"
+    elif command -v zenity >/dev/null 2>&1; then
+        tik_gui_cmd="zenity"
+    else
+        gui=false
+        tik_gui_cmd=""
+        log "[tik_init_dialog] No GUI dialog program found, falling back to cenity"
+    fi
+}
+
 log(){
     if $logging; then
         echo "[${tik_module}][$(date +"%Y%m%d-%T")][LOG] $*" 1>&2
@@ -26,8 +46,8 @@ d(){
     do
         retval=0
         if $gui; then
-            result="$(zenity "$@")" || retval=$?
-            log "[zenity][${retval}][${result}] $@"
+            result="$(${tik_gui_cmd} "$@")" || retval=$?
+            log "[${tik_gui_cmd}][${retval}][${result}] $@"
         else
             cenity result "$@" || retval=$?
             log "[cenity][${retval}][${result}] $@"
@@ -38,7 +58,7 @@ d(){
             ;;
             1|255)
                 if $gui; then
-                    zenity --question --text="Do you really want to quit?" && exit 1
+                    ${tik_gui_cmd} --question --text="Do you really want to quit?" && exit 1
                 else
                     cenity result --question --text="Do you really want to quit?" && exit 1
                 fi
@@ -50,8 +70,8 @@ d(){
 d_opt(){
     retval=0
     if $gui; then
-        result="$(zenity "$@")" || retval=$?
-        log "[zenity][${retval}][${result}] $@"
+        result="$(${tik_gui_cmd} "$@")" || retval=$?
+        log "[${tik_gui_cmd}][${retval}][${result}] $@"
     else
         cenity result "$@" || retval=$?
         log "[cenity][${retval}][${result}] $@"

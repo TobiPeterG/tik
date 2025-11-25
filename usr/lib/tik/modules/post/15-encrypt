@@ -132,8 +132,8 @@ configure_encryption() {
         while true
         do
             if $gui; then
-                pw=$(zenity --password --title='Set Encryption Passphrase')
-                pw_check=$(zenity --password --title='Type Passphrase Again')
+                pw=$(${tik_gui_cmd} --password --title='Set Encryption Passphrase')
+                pw_check=$(${tik_gui_cmd} --password --title='Type Passphrase Again')
             else
                 cenity pw --password --title="Set Encryption Passphrase"
                 cenity pw_check --password --title="Type Passphrase Again"

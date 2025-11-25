@@ -58,7 +58,7 @@ if [ -z "${skipbackup}" ]; then
             else
                 while [ 1 ]; do
                     if $gui; then
-                        passphrase=$(zenity --password --title="Encrypted partition (${encrypted_partition}) detected" --cancel-label="Skip") || break
+                        passphrase=$(${tik_gui_cmd} --password --title="Encrypted partition (${encrypted_partition}) detected" --cancel-label="Skip") || break
                     else
                         cenity passphrase --password --title="Encrypted partition (${encrypted_partition}) detected" --cancel-label="Skip" || break
                     fi
